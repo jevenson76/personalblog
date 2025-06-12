@@ -1,0 +1,70 @@
+---
+const today = new Date();
+---
+
+<footer class="footer">
+	<div class="footer-content">
+		<div class="footer-simple">
+			<p class="footer-text">&copy; {today.getFullYear()} My Personal Blog. All rights reserved.</p>
+			<div class="footer-links">
+				<a href="/">Home</a>
+				<a href="/blog">Blog</a>
+				<a href="/about">About</a>
+				<a href="/rss.xml">RSS</a>
+			</div>
+		</div>
+	</div>
+</footer>
+
+<style>
+	.footer {
+		background: rgba(var(--gray-light), 0.3);
+		margin-top: 4rem;
+		padding: 3rem 0;
+		border-top: 1px solid rgba(var(--gray), 0.2);
+	}
+	
+	.footer-content {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 1rem;
+	}
+	
+	.footer-simple {
+		text-align: center;
+	}
+	
+	.footer-text {
+		color: rgb(var(--gray));
+		font-size: 0.875rem;
+		margin-bottom: 1rem;
+	}
+	
+	.footer-links {
+		display: flex;
+		gap: 2rem;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+	
+	.footer-links a {
+		color: rgb(var(--gray-dark));
+		text-decoration: none;
+		font-size: 0.875rem;
+		transition: color 0.2s ease;
+	}
+	
+	.footer-links a:hover {
+		color: var(--accent);
+	}
+	
+	@media (max-width: 768px) {
+		.footer {
+			padding: 2rem 0;
+		}
+		
+		.footer-links {
+			gap: 1rem;
+		}
+	}
+</style>

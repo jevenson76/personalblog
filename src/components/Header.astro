@@ -1,0 +1,107 @@
+---
+import HeaderLink from './HeaderLink.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<header class="header">
+	<nav class="nav">
+		<div class="nav-brand">
+			<a href="/" class="brand-link no-underline">
+				<span class="brand-text">{SITE_TITLE}</span>
+			</a>
+		</div>
+		
+		<div class="nav-links">
+			<HeaderLink href="/">Home</HeaderLink>
+			<HeaderLink href="/blog">Blog</HeaderLink>
+			<HeaderLink href="/about">About</HeaderLink>
+		</div>
+		
+		
+		<button class="mobile-menu-toggle" aria-label="Toggle menu">
+			<span></span>
+			<span></span>
+			<span></span>
+		</button>
+	</nav>
+</header>
+
+<style>
+	.header {
+		position: sticky;
+		top: 0;
+		z-index: 100;
+		background: rgba(255, 255, 255, 0.8);
+		backdrop-filter: blur(20px);
+		border-bottom: 1px solid rgba(var(--gray), 0.1);
+		box-shadow: var(--shadow-sm);
+	}
+	
+	.nav {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 1rem;
+		gap: 2rem;
+	}
+	
+	.nav-brand {
+		flex-shrink: 0;
+	}
+	
+	.brand-link {
+		display: flex;
+		align-items: center;
+		color: rgb(var(--black));
+		font-weight: 600;
+		font-size: 1.25rem;
+		transition: all 0.2s ease;
+	}
+	
+	.brand-link:hover {
+		color: var(--accent);
+		transform: translateY(-1px);
+	}
+	
+	.nav-links {
+		display: flex;
+		align-items: center;
+		gap: 2rem;
+		flex: 1;
+		justify-content: center;
+	}
+	
+	.mobile-menu-toggle {
+		display: none;
+		flex-direction: column;
+		gap: 4px;
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 0.5rem;
+	}
+	
+	.mobile-menu-toggle span {
+		width: 20px;
+		height: 2px;
+		background: rgb(var(--gray-dark));
+		border-radius: 1px;
+		transition: all 0.3s ease;
+	}
+	
+	@media (max-width: 768px) {
+		.nav {
+			padding: 0.75rem 1rem;
+		}
+		
+		.nav-links {
+			display: none;
+		}
+		
+		.mobile-menu-toggle {
+			display: flex;
+		}
+	}
+</style>

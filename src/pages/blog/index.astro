@@ -1,0 +1,330 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import { getCollection } from 'astro:content';
+import FormattedDate from '../../components/FormattedDate.astro';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Blog - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	</head>
+	<body>
+		<Header />
+		
+		<main>
+			<section class="blog-hero">
+				<div class="container">
+					<div class="hero-content">
+						<h1 class="fade-in">Latest Articles & Insights</h1>
+						<p class="fade-in">
+							Discover the latest trends, best practices, and expert insights in web development, 
+							design, and technology.
+						</p>
+					</div>
+				</div>
+			</section>
+
+			<section class="blog-posts">
+				<div class="container">
+					{posts.length > 0 && (
+						<article class="featured-post card fade-in">
+							<div class="featured-image">
+								<img src={posts[0].data.heroImage} alt={posts[0].data.title} loading="eager" />
+							</div>
+							<div class="featured-content">
+								<div class="post-meta">
+									<span class="featured-badge">Featured</span>
+									<FormattedDate date={posts[0].data.pubDate} />
+								</div>
+								<h2 class="featured-title">
+									<a href={`/blog/${posts[0].id}/`} class="no-underline">{posts[0].data.title}</a>
+								</h2>
+								<p class="featured-excerpt">{posts[0].data.description}</p>
+								<a href={`/blog/${posts[0].id}/`} class="read-more">
+									Read Full Article
+									<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+										<path d="M5 12h14"/>
+										<path d="M12 5l7 7-7 7"/>
+									</svg>
+								</a>
+							</div>
+						</article>
+					)}
+
+					<div class="posts-grid">
+						{posts.slice(1).map((post) => (
+							<article class="card post-card fade-in">
+								<div class="post-image">
+									<img src={post.data.heroImage} alt={post.data.title} loading="lazy" />
+								</div>
+								<div class="post-content">
+									<div class="post-meta">
+										<FormattedDate date={post.data.pubDate} />
+									</div>
+									<h3 class="post-title">
+										<a href={`/blog/${post.id}/`} class="no-underline">{post.data.title}</a>
+									</h3>
+									<p class="post-excerpt">{post.data.description}</p>
+									<a href={`/blog/${post.id}/`} class="read-more">
+										Read More
+										<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+											<path d="M5 12h14"/>
+											<path d="M12 5l7 7-7 7"/>
+										</svg>
+									</a>
+								</div>
+							</article>
+						))}
+					</div>
+				</div>
+			</section>
+		</main>
+		
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 1rem;
+	}
+	
+	/* Blog Hero */
+	.blog-hero {
+		padding: 4rem 0 6rem;
+		text-align: center;
+		position: relative;
+	}
+	
+	.hero-content {
+		max-width: 800px;
+		margin: 0 auto;
+	}
+	
+	.blog-hero h1 {
+		font-size: clamp(2.5rem, 5vw, 4rem);
+		margin-bottom: 1.5rem;
+		background: linear-gradient(135deg, rgb(var(--black)) 0%, var(--accent) 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+	
+	.blog-hero p {
+		font-size: 1.25rem;
+		color: rgb(var(--gray));
+		line-height: 1.7;
+		max-width: 600px;
+		margin: 0 auto;
+	}
+	
+	/* Blog Posts */
+	.blog-posts {
+		padding-bottom: 6rem;
+	}
+	
+	/* Featured Post */
+	.featured-post {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 3rem;
+		align-items: center;
+		margin-bottom: 4rem;
+		padding: 3rem;
+		background: var(--card-gradient);
+		border: 1px solid rgba(var(--accent), 0.2);
+	}
+	
+	.featured-image {
+		position: relative;
+		overflow: hidden;
+		border-radius: var(--radius-lg);
+		aspect-ratio: 16/10;
+	}
+	
+	.featured-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.3s ease;
+		border-radius: var(--radius-lg);
+	}
+	
+	.featured-post:hover .featured-image img {
+		transform: scale(1.05);
+	}
+	
+	.featured-content {
+		padding: 1rem 0;
+	}
+	
+	.post-meta {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		margin-bottom: 1rem;
+		font-size: 0.875rem;
+		color: rgb(var(--gray));
+	}
+	
+	.featured-badge {
+		background: linear-gradient(135deg, var(--accent), var(--accent-light));
+		color: white;
+		padding: 0.25rem 0.75rem;
+		border-radius: var(--radius-sm);
+		font-weight: 500;
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+	
+	.featured-title {
+		font-size: clamp(1.5rem, 3vw, 2rem);
+		margin-bottom: 1rem;
+		line-height: 1.3;
+	}
+	
+	.featured-title a {
+		color: rgb(var(--black));
+		transition: color 0.2s ease;
+	}
+	
+	.featured-title a:hover {
+		color: var(--accent);
+	}
+	
+	.featured-excerpt {
+		font-size: 1.125rem;
+		color: rgb(var(--gray));
+		line-height: 1.6;
+		margin-bottom: 1.5rem;
+	}
+	
+	/* Posts Grid */
+	.posts-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+		gap: 2rem;
+	}
+	
+	.post-card {
+		overflow: hidden;
+		padding: 0;
+		transition: all 0.3s ease;
+		background: var(--card-gradient);
+	}
+	
+	.post-card:hover {
+		transform: translateY(-8px);
+		box-shadow: var(--shadow-xl);
+	}
+	
+	.post-image {
+		position: relative;
+		overflow: hidden;
+		aspect-ratio: 16/9;
+	}
+	
+	.post-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.3s ease;
+		border-radius: 0;
+	}
+	
+	.post-card:hover .post-image img {
+		transform: scale(1.05);
+	}
+	
+	.post-content {
+		padding: 2rem;
+	}
+	
+	.post-title {
+		margin-bottom: 0.75rem;
+		font-size: 1.25rem;
+		line-height: 1.4;
+	}
+	
+	.post-title a {
+		color: rgb(var(--black));
+		transition: color 0.2s ease;
+	}
+	
+	.post-title a:hover {
+		color: var(--accent);
+	}
+	
+	.post-excerpt {
+		color: rgb(var(--gray));
+		line-height: 1.6;
+		margin-bottom: 1.5rem;
+	}
+	
+	.read-more {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		color: var(--accent);
+		font-weight: 500;
+		font-size: 0.875rem;
+		transition: all 0.2s ease;
+	}
+	
+	.read-more:hover {
+		gap: 0.75rem;
+		color: var(--accent-dark);
+	}
+	
+	/* Animations */
+	.fade-in {
+		animation: fadeInUp 0.6s ease-out;
+	}
+	
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(30px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+	
+	/* Responsive Design */
+	@media (max-width: 768px) {
+		.blog-hero {
+			padding: 3rem 0 4rem;
+		}
+		
+		.featured-post {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+			padding: 2rem;
+		}
+		
+		.posts-grid {
+			grid-template-columns: 1fr;
+			gap: 1.5rem;
+		}
+		
+		.post-content {
+			padding: 1.5rem;
+		}
+	}
+</style>
