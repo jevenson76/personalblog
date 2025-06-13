@@ -5,6 +5,8 @@ import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { getCollection } from 'astro:content';
 import FormattedDate from '../components/FormattedDate.astro';
+import MagicButton from '../components/MagicButton.astro';
+import BentoGrid from '../components/BentoGrid.astro';
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -30,10 +32,10 @@ const posts = (await getCollection('blog')).sort(
 					I write about technology, programming, and life experiences. 
 					Join me as I share insights and stories from my journey.
 				</p>
-				<div class="hero-actions slide-up">
-					<a href="/blog" class="btn">Read My Posts</a>
-					<a href="/about" class="btn btn-secondary">About Me</a>
-				</div>
+                                <div class="hero-actions slide-up">
+                                        <MagicButton href="/blog" text="Read My Posts" />
+                                        <MagicButton href="/about" text="About Me" secondary={true} />
+                                </div>
 			</div>
 		</section>
 
@@ -45,35 +47,11 @@ const posts = (await getCollection('blog')).sort(
 					<p>My latest thoughts and writings</p>
 				</div>
 				
-				<div class="grid grid-3">
-					{posts.map((post) => (
-						<article class="card post-card fade-in">
-							<div class="post-image">
-								<img src={post.data.heroImage} alt={post.data.title} loading="lazy" />
-							</div>
-							<div class="post-content">
-								<div class="post-meta">
-									<FormattedDate date={post.data.pubDate} />
-								</div>
-								<h3 class="post-title">
-									<a href={`/blog/${post.id}/`} class="no-underline">{post.data.title}</a>
-								</h3>
-								<p class="post-excerpt">{post.data.description}</p>
-								<a href={`/blog/${post.id}/`} class="read-more">
-									Read More
-									<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-										<path d="M5 12h14"/>
-										<path d="M12 5l7 7-7 7"/>
-									</svg>
-								</a>
-							</div>
-						</article>
-					))}
-				</div>
+                                <BentoGrid posts={posts} />
 				
-				<div class="section-cta">
-					<a href="/blog" class="btn">View All Articles</a>
-				</div>
+                                <div class="section-cta">
+                                        <MagicButton href="/blog" text="View All Articles" />
+                                </div>
 			</div>
 		</section>
 
@@ -121,80 +99,6 @@ const posts = (await getCollection('blog')).sort(
 		background: rgba(var(--gray-light), 0.3);
 	}
 	
-	.post-card {
-		overflow: hidden;
-		padding: 0;
-		transition: all 0.3s ease;
-	}
-	
-	.post-card:hover {
-		transform: translateY(-8px);
-	}
-	
-	.post-image {
-		position: relative;
-		overflow: hidden;
-		aspect-ratio: 16/9;
-	}
-	
-	.post-image img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		transition: transform 0.3s ease;
-		border-radius: 0;
-	}
-	
-	.post-card:hover .post-image img {
-		transform: scale(1.05);
-	}
-	
-	.post-content {
-		padding: 1.5rem;
-	}
-	
-	.post-meta {
-		font-size: 0.875rem;
-		color: rgb(var(--gray));
-		margin-bottom: 0.75rem;
-	}
-	
-	.post-title {
-		margin-bottom: 0.75rem;
-		font-size: 1.125rem;
-		line-height: 1.4;
-	}
-	
-	.post-title a {
-		color: rgb(var(--black));
-		transition: color 0.2s ease;
-	}
-	
-	.post-title a:hover {
-		color: var(--accent);
-	}
-	
-	.post-excerpt {
-		color: rgb(var(--gray));
-		font-size: 0.875rem;
-		line-height: 1.6;
-		margin-bottom: 1rem;
-	}
-	
-	.read-more {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		color: var(--accent);
-		font-weight: 500;
-		font-size: 0.875rem;
-		transition: all 0.2s ease;
-	}
-	
-	.read-more:hover {
-		gap: 0.75rem;
-		color: var(--accent-dark);
-	}
 	
 	/* Animations */
 	@keyframes fadeInUp {

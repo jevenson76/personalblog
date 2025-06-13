@@ -18,6 +18,9 @@ const { title, description, image = '/blog-placeholder-1.jpg' } = Astro.props;
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="color-scheme" content="light dark" />
+<meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#1e1e20" media="(prefers-color-scheme: dark)" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
@@ -53,3 +56,19 @@ const { title, description, image = '/blog-placeholder-1.jpg' } = Astro.props;
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
+
+<!-- Theme toggle script -->
+<script>
+    (function () {
+        const root = document.documentElement;
+        const stored = localStorage.getItem('theme');
+        if (stored) {
+            root.dataset.theme = stored;
+        }
+        window.toggleTheme = function () {
+            const newTheme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+            root.dataset.theme = newTheme;
+            localStorage.setItem('theme', newTheme);
+        };
+    })();
+</script>

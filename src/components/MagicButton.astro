@@ -1,0 +1,14 @@
+---
+interface Props {
+    href: string;
+    text: string;
+    secondary?: boolean;
+}
+const { href, text, secondary = false } = Astro.props;
+---
+<a href={href} class={`magic-btn${secondary ? ' magic-btn-secondary' : ''}`}>
+    {text}
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+        <path d="M5 12h14M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2"/>
+    </svg>
+</a>
