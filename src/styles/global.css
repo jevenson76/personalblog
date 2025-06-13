@@ -5,9 +5,11 @@
 
 :root {
 	/* Primary colors */
-	--accent: #5e6ad2;
-	--accent-dark: #4c5bc7;
-	--accent-light: #7c88db;
+        --accent: #5e6ad2;
+        --accent-dark: #4c5bc7;
+        --accent-light: #7c88db;
+        --accent-rgb: 94, 106, 210;
+        --accent-light-rgb: 124, 136, 219;
 	
 	/* Neutral colors */
 	--black: 8, 8, 11;
@@ -130,13 +132,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-	font-size: clamp(2.5rem, 5vw, 4rem);
-	font-weight: 700;
-	background: linear-gradient(135deg, rgb(var(--black)) 0%, var(--accent) 100%);
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
-	background-clip: text;
-	margin-bottom: 1.5rem;
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 700;
+        background: linear-gradient(135deg, rgb(var(--black)) 0%, var(--accent) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        background-size: 200% 100%;
+        animation: textGradient 8s linear infinite;
+        margin-bottom: 1.5rem;
+}
+
+@keyframes textGradient {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
 }
 
 h2 {
@@ -182,27 +191,28 @@ a:not(.no-underline):hover::after {
 
 /* Buttons */
 .btn {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.5rem;
-	padding: 0.75rem 1.5rem;
-	background: var(--accent);
-	color: white;
-	border: none;
-	border-radius: var(--radius-md);
-	font-weight: 500;
-	font-size: 0.875rem;
-	cursor: pointer;
-	transition: all 0.2s ease;
-	text-decoration: none;
-	box-shadow: var(--shadow-sm);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background-image: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 100%);
+        background-size: 200% 100%;
+        color: white;
+        border: none;
+        border-radius: var(--radius-md);
+        font-weight: 500;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        box-shadow: var(--shadow-sm);
 }
 
 .btn:hover {
-	background: var(--accent-dark);
-	transform: translateY(-1px);
-	box-shadow: var(--shadow-md);
-	color: white;
+        background-position: right center;
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+        color: white;
 }
 
 .btn-secondary {
@@ -243,7 +253,7 @@ a:not(.no-underline):hover::after {
 .card:hover {
 	transform: translateY(-4px);
 	box-shadow: var(--shadow-xl);
-	border-color: rgba(var(--accent), 0.3);
+        border-color: rgba(var(--accent-rgb), 0.3);
 }
 
 /* Grid layouts */
@@ -262,9 +272,23 @@ a:not(.no-underline):hover::after {
 
 /* Hero section */
 .hero {
-	text-align: center;
-	padding: 4rem 0 6rem;
-	position: relative;
+        text-align: center;
+        padding: 4rem 0 6rem;
+        position: relative;
+}
+
+.hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 50% -20%, rgba(var(--accent-rgb), 0.2), transparent 70%);
+        z-index: -1;
+        animation: heroPulse 10s ease-in-out infinite;
+}
+
+@keyframes heroPulse {
+        0%, 100% { transform: scale(1); opacity: 0.8; }
+        50% { transform: scale(1.1); opacity: 1; }
 }
 
 .hero-content {
@@ -326,7 +350,7 @@ blockquote {
 	border-left: 4px solid var(--accent);
 	padding: 1rem 0 1rem 1.5rem;
 	margin: 2rem 0;
-	background: rgba(var(--accent), 0.05);
+        background: rgba(var(--accent-rgb), 0.05);
 	border-radius: 0 var(--radius-md) var(--radius-md) 0;
 	font-style: italic;
 	position: relative;
@@ -361,7 +385,7 @@ th, td {
 }
 
 th {
-	background: rgba(var(--accent), 0.1);
+        background: rgba(var(--accent-rgb), 0.1);
 	font-weight: 600;
 	color: rgb(var(--black));
 }
@@ -463,6 +487,8 @@ li {
                --accent: #8b9eff;
                --accent-dark: #6f85f2;
                --accent-light: #aab6ff;
+               --accent-rgb: 139, 158, 255;
+               --accent-light-rgb: 170, 182, 255;
 
                --black: 255, 255, 255;
                --gray: 200, 200, 205;
