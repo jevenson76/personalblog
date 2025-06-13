@@ -456,3 +456,39 @@ li {
 .mt-2 { margin-top: 1rem; }
 .mt-3 { margin-top: 1.5rem; }
 .mt-4 { margin-top: 2rem; }
+
+/* Dark mode styling */
+@media (prefers-color-scheme: dark) {
+       :root {
+               --accent: #8b9eff;
+               --accent-dark: #6f85f2;
+               --accent-light: #aab6ff;
+
+               --black: 255, 255, 255;
+               --gray: 200, 200, 205;
+               --gray-light: 60, 60, 65;
+               --gray-dark: 220, 220, 230;
+               --gray-darker: 30, 30, 32;
+
+               --bg-gradient: linear-gradient(135deg,
+                               rgba(50, 56, 100, 0.4) 0%,
+                               rgba(40, 48, 84, 0.4) 100%);
+               --hero-gradient: radial-gradient(ellipse 80% 50% at 50% -20%,
+                               rgba(94, 106, 210, 0.25) 0%,
+                               transparent 60%);
+               --card-gradient: linear-gradient(135deg,
+                               rgba(255, 255, 255, 0.05) 0%,
+                               rgba(255, 255, 255, 0.02) 100%);
+       }
+
+       body {
+               background: rgb(var(--gray-darker));
+               background-image: var(--bg-gradient);
+               color: rgb(var(--gray-dark));
+       }
+
+       .card {
+               background: var(--card-gradient);
+               border-color: rgba(255, 255, 255, 0.1);
+       }
+}
