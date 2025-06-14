@@ -4,241 +4,526 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { getCollection } from 'astro:content';
-import FormattedDate from '../components/FormattedDate.astro';
+import MagicButton from '../components/MagicButton.astro';
+import BentoGrid from '../components/BentoGrid.astro';
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-).slice(0, 3);
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-	</head>
-	<body>
-		<Header />
-		
-		<!-- Hero Section -->
-		<section class="hero fade-in">
-			<div class="hero-content">
-				<h1 class="slide-up">Welcome to My Blog</h1>
-				<p class="slide-up">
-					I write about technology, programming, and life experiences. 
-					Join me as I share insights and stories from my journey.
-				</p>
-				<div class="hero-actions slide-up">
-					<a href="/blog" class="btn">Read My Posts</a>
-					<a href="/about" class="btn btn-secondary">About Me</a>
-				</div>
-			</div>
-		</section>
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <Header />
 
-		<!-- Latest Posts Section -->
-		<section class="latest-posts">
-			<div class="container">
-				<div class="section-header">
-					<h2>Recent Posts</h2>
-					<p>My latest thoughts and writings</p>
-				</div>
-				
-				<div class="grid grid-3">
-					{posts.map((post) => (
-						<article class="card post-card fade-in">
-							<div class="post-image">
-								<img src={post.data.heroImage} alt={post.data.title} loading="lazy" />
-							</div>
-							<div class="post-content">
-								<div class="post-meta">
-									<FormattedDate date={post.data.pubDate} />
-								</div>
-								<h3 class="post-title">
-									<a href={`/blog/${post.id}/`} class="no-underline">{post.data.title}</a>
-								</h3>
-								<p class="post-excerpt">{post.data.description}</p>
-								<a href={`/blog/${post.id}/`} class="read-more">
-									Read More
-									<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-										<path d="M5 12h14"/>
-										<path d="M12 5l7 7-7 7"/>
-									</svg>
-								</a>
-							</div>
-						</article>
-					))}
-				</div>
-				
-				<div class="section-cta">
-					<a href="/blog" class="btn">View All Articles</a>
-				</div>
-			</div>
-		</section>
+    <!-- Hero Section -->
+    <section class="hero fade-in">
+      <div class="hero-content">
+        <h1 class="slide-up">Welcome to My Blog</h1>
+        <p class="slide-up">
+          I write about technology, programming, and life experiences. Join me as
+          I share insights and stories from my journey.
+        </p>
+        <div class="hero-actions slide-up">
+          <MagicButton href="/blog" text="Read My Posts" />
+          <MagicButton href="/about" text="About Me" secondary={true} />
+        </div>
+      </div>
+    </section>
 
+    <!-- Latest Posts Section -->
+    <section class="latest-posts">
+      <div class="container">
+        <div class="section-header">
+          <h2>Recent Posts</h2>
+          <p>My latest thoughts and writings</p>
+        </div>
 
-		<Footer />
-	</body>
+        <BentoGrid posts={posts} />
+
+        <div class="section-cta">
+          <MagicButton href="/blog" text="View All Articles" />
+        </div>
+      </div>
+    </section>
+
+    <Footer />
+  </body>
 </html>
 
 <style>
-	.container {
-		max-width: 1200px;
-		margin: 0 auto;
-		padding: 0 1rem;
-	}
-	
-	.section-header {
-		text-align: center;
-		margin-bottom: 4rem;
-	}
-	
-	.section-header h2 {
-		font-size: clamp(2rem, 4vw, 3rem);
-		margin-bottom: 1rem;
-		background: linear-gradient(135deg, rgb(var(--black)) 0%, var(--accent) 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-	}
-	
-	.section-header p {
-		font-size: 1.125rem;
-		color: rgb(var(--gray));
-		max-width: 600px;
-		margin: 0 auto;
-	}
-	
-	.section-cta {
-		text-align: center;
-		margin-top: 3rem;
-	}
-	
-	/* Latest Posts Section */
-	.latest-posts {
-		padding: 6rem 0;
-		background: rgba(var(--gray-light), 0.3);
-	}
-	
-	.post-card {
-		overflow: hidden;
-		padding: 0;
-		transition: all 0.3s ease;
-	}
-	
-	.post-card:hover {
-		transform: translateY(-8px);
-	}
-	
-	.post-image {
-		position: relative;
-		overflow: hidden;
-		aspect-ratio: 16/9;
-	}
-	
-	.post-image img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		transition: transform 0.3s ease;
-		border-radius: 0;
-	}
-	
-	.post-card:hover .post-image img {
-		transform: scale(1.05);
-	}
-	
-	.post-content {
-		padding: 1.5rem;
-	}
-	
-	.post-meta {
-		font-size: 0.875rem;
-		color: rgb(var(--gray));
-		margin-bottom: 0.75rem;
-	}
-	
-	.post-title {
-		margin-bottom: 0.75rem;
-		font-size: 1.125rem;
-		line-height: 1.4;
-	}
-	
-	.post-title a {
-		color: rgb(var(--black));
-		transition: color 0.2s ease;
-	}
-	
-	.post-title a:hover {
-		color: var(--accent);
-	}
-	
-	.post-excerpt {
-		color: rgb(var(--gray));
-		font-size: 0.875rem;
-		line-height: 1.6;
-		margin-bottom: 1rem;
-	}
-	
-	.read-more {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		color: var(--accent);
-		font-weight: 500;
-		font-size: 0.875rem;
-		transition: all 0.2s ease;
-	}
-	
-	.read-more:hover {
-		gap: 0.75rem;
-		color: var(--accent-dark);
-	}
-	
-	/* Animations */
-	@keyframes fadeInUp {
-		from {
-			opacity: 0;
-			transform: translateY(30px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-	
-	.fade-in {
-		animation: fadeInUp 0.6s ease-out;
-	}
-	
-	.slide-up {
-		animation: fadeInUp 0.8s ease-out;
-	}
-	
-	.slide-up:nth-child(2) {
-		animation-delay: 0.2s;
-		animation-fill-mode: both;
-	}
-	
-	.slide-up:nth-child(3) {
-		animation-delay: 0.4s;
-		animation-fill-mode: both;
-	}
-	
-	/* Responsive Design */
-	@media (max-width: 768px) {
-		.hero {
-			padding: 3rem 0 4rem;
-		}
-		
-		.latest-posts {
-			padding: 4rem 0;
-		}
-		
-		.section-header {
-			margin-bottom: 3rem;
-		}
-		
-	}
+  /* =========================
+     Global Variables & Theme
+  ==========================*/
+  :root {
+    /* Primary colors */
+    --accent: #5e6ad2;
+    --accent-dark: #4c5bc7;
+    --accent-light: #7c88db;
+    --accent-rgb: 94, 106, 210;
+
+    /* Neutral colors */
+    --black: 8, 8, 11;
+    --gray: 113, 113, 122;
+    --gray-light: 244, 244, 245;
+    --gray-dark: 39, 39, 42;
+    --gray-darker: 24, 24, 27;
+
+    /* Background gradients */
+    --bg-gradient: linear-gradient(
+      135deg,
+      rgba(94, 106, 210, 0.1) 0%,
+      rgba(124, 136, 219, 0.05) 25%,
+      rgba(255, 255, 255, 0.02) 50%,
+      rgba(94, 106, 210, 0.08) 75%,
+      rgba(124, 136, 219, 0.12) 100%
+    );
+    --hero-gradient: radial-gradient(
+      ellipse 80% 50% at 50% -20%,
+      rgba(94, 106, 210, 0.15) 0%,
+      transparent 60%
+    );
+    --card-gradient: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    /* Radius */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+  }
+
+  /* =========================
+     Base & Typography
+  ==========================*/
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      sans-serif;
+    background: #fafafa;
+    background-image: var(--bg-gradient);
+    background-attachment: fixed;
+    color: rgb(var(--gray-dark));
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* =========================
+     Layout Utilities
+  ==========================*/
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  /* =========================
+     Section Headers & CTA
+  ==========================*/
+  .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .section-header h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, rgb(var(--black)) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .section-header p {
+    font-size: 1.125rem;
+    color: rgb(var(--gray));
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .section-cta {
+    text-align: center;
+    margin-top: 3rem;
+  }
+
+  /* =========================
+     Hero Section
+  ==========================*/
+  .hero {
+    text-align: center;
+    padding: 4rem 0 6rem;
+    position: relative;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at 50% -20%,
+      rgba(var(--accent-rgb), 0.2),
+      transparent 70%
+    );
+    z-index: -1;
+    animation: heroPulse 10s ease-in-out infinite;
+  }
+
+  .hero-content p {
+    font-size: 1.25rem;
+    color: rgb(var(--gray));
+    margin-bottom: 2rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+
+  /* =========================
+     Latest Posts & Cards
+  ==========================*/
+  .latest-posts {
+    padding: 6rem 0;
+    background: rgba(var(--gray-light), 0.3);
+  }
+
+  .post-card {
+    overflow: hidden;
+    padding: 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease,
+      border-color 0.3s ease;
+    border: 1px solid rgba(var(--gray), 0.1);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+  }
+
+  .post-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(var(--accent-rgb), 0.3);
+  }
+
+  .post-image {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background: linear-gradient(
+      135deg,
+      rgba(var(--accent-rgb), 0.25),
+      transparent
+    );
+    border-bottom: 1px solid rgba(var(--gray), 0.1);
+  }
+
+  .post-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgba(0, 0, 0, 0.2),
+      transparent 70%
+    );
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+  }
+
+  .post-card:hover .post-image::after {
+    opacity: 1;
+  }
+
+  .post-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .post-card:hover .post-image img {
+    transform: scale(1.08);
+  }
+
+  .post-content {
+    padding: 1.5rem;
+  }
+
+  .post-meta {
+    font-size: 0.875rem;
+    color: rgb(var(--gray));
+    margin-bottom: 0.75rem;
+  }
+
+  .post-title {
+    margin-bottom: 0.75rem;
+    font-size: 1.125rem;
+    line-height: 1.4;
+  }
+
+  .post-title a {
+    color: rgb(var(--black));
+    transition: color 0.2s ease;
+  }
+
+  .post-title a:hover {
+    color: var(--accent);
+  }
+
+  .post-excerpt {
+    color: rgb(var(--gray));
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--accent);
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+  }
+
+  .read-more:hover {
+    gap: 0.75rem;
+    color: var(--accent-dark);
+  }
+
+  /* =========================
+     Magic Buttons & BentoGrid
+  ==========================*/
+  .magic-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    position: relative;
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: var(--accent);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: color 0.3s ease;
+  }
+
+  .magic-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 100%);
+    opacity: 0.15;
+    transition: opacity 0.3s ease;
+  }
+
+  .magic-btn:hover::before {
+    opacity: 0.3;
+  }
+
+  .magic-btn svg {
+    transition: transform 0.3s ease;
+  }
+
+  .magic-btn:hover svg {
+    transform: translateX(2px);
+  }
+
+  .magic-btn-secondary {
+    color: rgb(var(--gray-dark));
+  }
+
+  /* Bento grid */
+  .bento-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+
+  .bento-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    background: var(--card-gradient);
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .bento-item:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .bento-item img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-bottom: 1px solid rgba(var(--gray), 0.1);
+  }
+
+  .bento-info {
+    padding: 1rem;
+  }
+
+  .bento-info h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    color: rgb(var(--black));
+  }
+
+  .bento-date {
+    font-size: 0.75rem;
+    color: rgb(var(--gray));
+  }
+
+  /* =========================
+     Animations
+  ==========================*/
+  @keyframes heroPulse {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.8;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fade-in {
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  .slide-up {
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  .slide-up:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .slide-up:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  /* =========================
+     Responsive Breakpoints
+  ==========================*/
+  @media (max-width: 768px) {
+    body {
+      font-size: 14px;
+    }
+
+    .hero {
+      padding: 2rem 0 4rem;
+    }
+
+    .latest-posts {
+      padding: 4rem 0;
+    }
+
+    .section-header {
+      margin-bottom: 3rem;
+    }
+
+    .hero-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  /* =========================
+     Dark Mode
+  ==========================*/
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --accent: #8b9eff;
+      --accent-dark: #6f85f2;
+      --accent-light: #aab6ff;
+      --accent-rgb: 139, 158, 255;
+
+      --black: 255, 255, 255;
+      --gray: 200, 200, 205;
+      --gray-light: 60, 60, 65;
+      --gray-dark: 220, 220, 230;
+      --gray-darker: 30, 30, 32;
+
+      --bg-gradient: linear-gradient(
+        135deg,
+        rgba(50, 56, 100, 0.4) 0%,
+        rgba(40, 48, 84, 0.4) 100%
+      );
+      --hero-gradient: radial-gradient(
+        ellipse 80% 50% at 50% -20%,
+        rgba(94, 106, 210, 0.25) 0%,
+        transparent 60%
+      );
+      --card-gradient: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.05) 0%,
+        rgba(255, 255, 255, 0.02) 100%
+      );
+    }
+
+    body {
+      background: rgb(var(--gray-darker));
+      background-image: var(--bg-gradient);
+      color: rgb(var(--gray-dark));
+    }
+
+    .card,
+    .post-card,
+    .bento-item {
+      background: var(--card-gradient);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+  }
 </style>

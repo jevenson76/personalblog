@@ -1,0 +1,4 @@
+---
+const { href, text, secondary = false } = Astro.props;
+---
+<a href={href} class={`btn${secondary ? ' btn-secondary' : ''}`}>{text}</a>
